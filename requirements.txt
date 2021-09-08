@@ -1,0 +1,11 @@
+PyYAML
+jupyter
+matplotlib
+numpy
+scipy
+pandas
+pytz
+sklearn  # for Gaussian Process
+gpflow==2.1.4
+tensorflow
+#tensorflow-gpu # choose tensorflow-probability version that work with the installed tensorflow version

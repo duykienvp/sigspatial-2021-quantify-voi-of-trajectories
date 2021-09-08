@@ -1,0 +1,44 @@
+project_dir: /Volumes/DATA/git/sigspatial-2021-quantify-voi-of-trajectories  # all others dir/files are inside this directory
+
+
+data:
+  data_dir: data/geolife_raw_000/     # data directory inside the project directory
+  dataset_type: GEOLIFE_RAW      # dataset type (for input file parsing)
+
+output:
+  output_dir: output/current/  # output directory
+  output_file: output_scp    # output file (inside output directory)
+
+trajectory_interval: INTERVAL_GAP_THRESHOLD
+
+query:  # We can consider a degradation as a query
+  pricing_type: IG_TRAJ_DAY  # INFORMATION_GAIN_SUM_TRAJECTORY_DURATION
+  degradation_type: NONE  # NONE, ADD_NOISE, SUBSAMPLING
+  transformation_type: NONE  # NONE, HISTOGRAM
+  random_seed: 1
+  subsampling_ratio: 1.0  # get only 0.5 random data points from a purchased trajectory
+  add_noise_magnitude: 10 # Noise magnitude if we add noise to location measurements (in meters)
+
+  start_prior: CENTERED_NORMAL  # Prior entropies is prior without any previous purchases
+  previous_purchases: NONE  # Previous purchases assume the buyer bought something (or NONE if assumed bought nothing, then use start_prior)
+
+reconstruction:
+  method: GAUSSIAN_PROCESS
+  framework: GPFLOW # 'gpflow' or 'sklearn'
+  gp_kernel: MATERN32  # GP kernel: matern32 (default), matern12, matern52, RationalQuadratic, SquaredExponential
+  max_training_size: 1000  # maximum number of training size; -1 if no max;
+  overlapping_size: 10  # each chunk overlaps this many points with previous and next chunks
+
+start_user_id: 0
+start_traj_idx: 0
+end_user_id: 1
+
+evaluation:
+  area_code: BEIJING     # see constants.py for the boundary info. Default is global
+
+  grid_cell_len_x: 1000      # length of a cell in x dimension, each cell is a region for evaluation
+  grid_cell_len_y: 1000      # length of a cell in y dimension, each cell is a region for evaluation
+  grid_boundary_order: 1000  # extend the max/min coordinates to the nearest boundary_order
+
+  default_location_measurement_std: 3  # default value of the standard deviation of location measurement (in meters)
+
